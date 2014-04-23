@@ -34,8 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    self.clearsSelectionOnViewWillAppear = YES;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
@@ -81,7 +80,7 @@
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    cell.textLabel.text = [[_words objectAtIndex:indexPath.row] valueForKey:@"word.word"];
+    cell.textLabel.text = [[_words objectAtIndex:indexPath.row] valueForKeyPath:@"word.word"];
     
     return cell;
 }
@@ -93,7 +92,7 @@
 {
     Word *word = [[_words objectAtIndex:indexPath.row] valueForKey:@"word"];
     WordWebViewController *wordVC = [[WordWebViewController alloc] initWithNibName:nil bundle:nil];
-    wordVC.showingWord = word;
+    wordVC.showingWord = word.word;
     [wordVC setNotRecord:YES];
     [self.navigationController pushViewController:wordVC animated:YES];
 }

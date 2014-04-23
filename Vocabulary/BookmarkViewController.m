@@ -8,6 +8,7 @@
 
 #import "BookmarkViewController.h"
 #import "NewBookmarkViewController.h"
+#import "WordTableViewController.h"
 #import "Bookmark.h"
 #import "AppDelegate.h"
 
@@ -120,7 +121,8 @@
 {
     //UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    UITableViewController *vc = [[UITableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    WordTableViewController *vc = [[WordTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    vc.bookmark = self.bookmarks[indexPath.row];
     [self.navigationController pushViewController:vc animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     

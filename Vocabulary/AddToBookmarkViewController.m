@@ -179,7 +179,7 @@
             [self.managedObjectContext deleteObject:word_bookmarks[0]];
 
         }
-        if([[dic valueForKey:@"old_have"] isEqual: @"NO"] && [[dic valueForKey:@"needDelete"] isEqual: @"YES"])
+        if([[dic valueForKey:@"old_have"] isEqual: @"NO"] && [[dic valueForKey:@"now_have"] isEqual: @"YES"])
         {
             NSManagedObjectContext *context = [self managedObjectContext];
             Word_Bookmark *word = (Word_Bookmark*)[NSEntityDescription

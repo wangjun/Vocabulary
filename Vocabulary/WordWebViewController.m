@@ -21,6 +21,7 @@
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize showingWord = _showingWord,wordweb;
+@synthesize notRecord = _notRecord;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -189,6 +190,6 @@
 }
 -(void)setNotRecord:(BOOL)record
 {
-    self.notRecord = record;
+    _notRecord = record;
 }
 @end
