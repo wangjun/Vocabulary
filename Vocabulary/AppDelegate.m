@@ -7,11 +7,104 @@
 //
 
 #import "AppDelegate.h"
+#import "WordWebViewController.h"
+#import "BookmarkViewController.h"
+#import "AllWordViewController.h"
+#import "HistoryViewController.h"
+#import "Word.h"
+#import "Bookmark.h"
+#import "LocalHistory.h"
+
 
 @implementation AppDelegate
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunched"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"everLaunched"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
+        [[NSUserDefaults standardUserDefaults] setValue:@"a" forKey:@"currentWord"];
+        NSString *bundlePath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"words.bundle"];
+        NSArray *fileList = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:bundlePath error:nil];
+        NSEnumerator *files = [fileList objectEnumerator];
+        NSString *string;
+        while (string = [files nextObject]) {
+            NSString *wordname = [string componentsSeparatedByString:@"."][0];
+            NSManagedObjectContext *context = [self managedObjectContext];
+            Word *word = (Word*)[NSEntityDescription
+                                              insertNewObjectForEntityForName:@"Word"
+                                              inManagedObjectContext:context];
+            word.word = wordname;
+            word.lookdCount = 0;
+            NSLog(@"%@",word.word);
+        }
+        [self saveContext];
+        
+    }
+    else
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    UITabBarController *rootViewController = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
+    
+    
+    WordWebViewController *wordwebVC = [[WordWebViewController alloc] initWithNibName:nil bundle:nil];
+    UINavigationController *wordNavVC = [[UINavigationController alloc] initWithRootViewController:wordwebVC];
+    wordNavVC.tabBarItem.title = @"继续背单词";
+    [rootViewController addChildViewController:wordNavVC];
+    
+    
+    BookmarkViewController *bookmarkVC = [[BookmarkViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    UINavigationController *bookmarkNavC = [[UINavigationController alloc] initWithRootViewController:bookmarkVC];
+    bookmarkNavC.tabBarItem.title = @"收藏夹";    
+    [rootViewController addChildViewController:bookmarkNavC];
+    
+    
+    AllWordViewController *allwordVC = [[AllWordViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    UINavigationController *allwordNavC = [[UINavigationController alloc] initWithRootViewController:allwordVC];
+    allwordNavC.tabBarItem.title = @"全部单词";
+    [rootViewController addChildViewController:allwordNavC];
+    
+    
+    HistoryViewController *historyVC = [[HistoryViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    UINavigationController *historyNavVC = [[UINavigationController alloc] initWithRootViewController:historyVC];
+    historyNavVC.tabBarItem.title = @"历史记录";
+    [rootViewController addChildViewController:historyNavVC];
+    
+    
+    [self.window setRootViewController:rootViewController];
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+    {
+        NSManagedObjectContext *context = [self managedObjectContext];
+        Bookmark *bookmark1 = (Bookmark*)[NSEntityDescription
+                                           insertNewObjectForEntityForName:@"Bookmark"
+                                           inManagedObjectContext:context];
+        [bookmark1 setValue:@"词汇1" forKey:@"name"];
+        [bookmark1 setValue:[NSDate date] forKey:@"adddate"];
+        Word *word1 = (Word*)[NSEntityDescription
+                                              insertNewObjectForEntityForName:@"Word"
+                                              inManagedObjectContext:context];
+        [word1 setValue:@"able" forKey:@"word"];
+        [word1 addBookmarks:[NSSet setWithObject:bookmark1]];
+        [bookmark1 addWord_had:[NSSet setWithObject:word1]];
+        NSError *error;
+        if (![context save:&error]) {
+            NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+        }
+    }
+    
     // Override point for customization after application launch.
     return YES;
 }
@@ -42,5 +135,79 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+- (void)saveContext
+{
+    NSError *error = nil;
+    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+    if (managedObjectContext != nil) {
+        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+    }
+}
 
+#pragma mark - Core Data stack
+
+- (NSManagedObjectContext *)managedObjectContext
+{
+    if (_managedObjectContext != nil) {
+        return _managedObjectContext;
+    }
+    
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if (coordinator != nil) {
+        _managedObjectContext = [[NSManagedObjectContext alloc] init];
+        [_managedObjectContext setPersistentStoreCoordinator:coordinator];
+    }
+    return _managedObjectContext;
+}
+
+- (NSManagedObjectModel *)managedObjectModel
+{
+    if (_managedObjectModel != nil) {
+        return _managedObjectModel;
+    }
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Vocabulary" withExtension:@"momd"];
+    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    return _managedObjectModel;
+}
+
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
+{
+    if (_persistentStoreCoordinator != nil) {
+        return _persistentStoreCoordinator;
+    }
+    
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Vocabulary.sqlite"];
+    
+    NSError *error = nil;
+    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+        
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return _persistentStoreCoordinator;
+}
+
+- (NSURL *)applicationDocumentsDirectory
+{
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+
+
++(NSArray*)shareWordArray
+{
+    if(wordArray == nil)
+    {
+        wordArray = @[@"able",@"able",@"able"];
+    }
+    
+    return wordArray;
+}
 @end

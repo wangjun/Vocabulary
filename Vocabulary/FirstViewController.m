@@ -17,6 +17,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.url = [[NSBundle mainBundle] URLForResource:@"able" withExtension:@"html"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:self.url];
+    [self.webView loadRequest:request];
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
