@@ -9,13 +9,14 @@
 #import "Word.h"
 #import "Bookmark.h"
 #import "LocalHistory.h"
+#import "Word_Bookmark.h"
 
 
 @implementation Word
 
 @dynamic word;
 @dynamic lookdCount;
-@dynamic bookmarks;
 @dynamic history;
+@dynamic word_bookmark;
 
 @end

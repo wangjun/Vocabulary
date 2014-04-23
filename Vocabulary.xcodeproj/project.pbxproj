@@ -24,11 +24,13 @@
 		324ED2481906A95600E4335B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 324ED2471906A95600E4335B /* Default-568h@2x.png */; };
 		324ED2641906B69200E4335B /* able.html in Resources */ = {isa = PBXBuildFile; fileRef = 324ED2631906B69200E4335B /* able.html */; };
 		32C0DEC819078D0500C073AF /* Vocabulary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DEC619078D0500C073AF /* Vocabulary.xcdatamodeld */; };
-		32C0DED21907AE5B00C073AF /* Word.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DED11907AE5B00C073AF /* Word.m */; };
 		32C0DED61907AEE600C073AF /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DED51907AEE600C073AF /* Bookmark.m */; };
 		32C0DED91907B03B00C073AF /* NewBookmarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DED81907B03B00C073AF /* NewBookmarkViewController.m */; };
-		32C0DEDF1907C6CE00C073AF /* LocalHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DEDE1907C6CE00C073AF /* LocalHistory.m */; };
 		32C0DF151907E0E900C073AF /* words.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 32C0DF141907E0E800C073AF /* words.bundle */; };
+		32C0DF181907E4C500C073AF /* WordTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DF171907E4C400C073AF /* WordTableViewController.m */; };
+		32C0DF1E1907E7F200C073AF /* Word_Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DF1D1907E7F100C073AF /* Word_Bookmark.m */; };
+		32C0DF211907E7F300C073AF /* Word.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DF201907E7F300C073AF /* Word.m */; };
+		32C0DF241907E7F400C073AF /* LocalHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DF231907E7F400C073AF /* LocalHistory.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,15 +60,19 @@
 		324ED2471906A95600E4335B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		324ED2631906B69200E4335B /* able.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = able.html; sourceTree = "<group>"; };
 		32C0DEC719078D0500C073AF /* Vocabulary.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Vocabulary.xcdatamodel; sourceTree = "<group>"; };
-		32C0DED01907AE5B00C073AF /* Word.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Word.h; path = Vocabulary/Word.h; sourceTree = "<group>"; };
-		32C0DED11907AE5B00C073AF /* Word.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Word.m; path = Vocabulary/Word.m; sourceTree = "<group>"; };
 		32C0DED41907AEE600C073AF /* Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bookmark.h; path = Vocabulary/Bookmark.h; sourceTree = "<group>"; };
 		32C0DED51907AEE600C073AF /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Bookmark.m; path = Vocabulary/Bookmark.m; sourceTree = "<group>"; };
 		32C0DED71907B03B00C073AF /* NewBookmarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewBookmarkViewController.h; path = Vocabulary/NewBookmarkViewController.h; sourceTree = "<group>"; };
 		32C0DED81907B03B00C073AF /* NewBookmarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewBookmarkViewController.m; path = Vocabulary/NewBookmarkViewController.m; sourceTree = "<group>"; };
-		32C0DEDD1907C6CE00C073AF /* LocalHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocalHistory.h; path = Vocabulary/LocalHistory.h; sourceTree = "<group>"; };
-		32C0DEDE1907C6CE00C073AF /* LocalHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocalHistory.m; path = Vocabulary/LocalHistory.m; sourceTree = "<group>"; };
 		32C0DF141907E0E800C073AF /* words.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = words.bundle; sourceTree = "<group>"; };
+		32C0DF161907E4C400C073AF /* WordTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WordTableViewController.h; path = Vocabulary/WordTableViewController.h; sourceTree = "<group>"; };
+		32C0DF171907E4C400C073AF /* WordTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WordTableViewController.m; path = Vocabulary/WordTableViewController.m; sourceTree = "<group>"; };
+		32C0DF1C1907E7F100C073AF /* Word_Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Word_Bookmark.h; path = Vocabulary/Word_Bookmark.h; sourceTree = "<group>"; };
+		32C0DF1D1907E7F100C073AF /* Word_Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Word_Bookmark.m; path = Vocabulary/Word_Bookmark.m; sourceTree = "<group>"; };
+		32C0DF1F1907E7F200C073AF /* Word.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Word.h; path = Vocabulary/Word.h; sourceTree = "<group>"; };
+		32C0DF201907E7F300C073AF /* Word.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Word.m; path = Vocabulary/Word.m; sourceTree = "<group>"; };
+		32C0DF221907E7F300C073AF /* LocalHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocalHistory.h; path = Vocabulary/LocalHistory.h; sourceTree = "<group>"; };
+		32C0DF231907E7F400C073AF /* LocalHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocalHistory.m; path = Vocabulary/LocalHistory.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,12 +93,16 @@
 		324ED2251906A95600E4335B = {
 			isa = PBXGroup;
 			children = (
-				32C0DEDD1907C6CE00C073AF /* LocalHistory.h */,
-				32C0DEDE1907C6CE00C073AF /* LocalHistory.m */,
+				32C0DF221907E7F300C073AF /* LocalHistory.h */,
+				32C0DF231907E7F400C073AF /* LocalHistory.m */,
+				32C0DF1F1907E7F200C073AF /* Word.h */,
+				32C0DF201907E7F300C073AF /* Word.m */,
+				32C0DF1C1907E7F100C073AF /* Word_Bookmark.h */,
+				32C0DF1D1907E7F100C073AF /* Word_Bookmark.m */,
+				32C0DF161907E4C400C073AF /* WordTableViewController.h */,
+				32C0DF171907E4C400C073AF /* WordTableViewController.m */,
 				32C0DED71907B03B00C073AF /* NewBookmarkViewController.h */,
 				32C0DED81907B03B00C073AF /* NewBookmarkViewController.m */,
-				32C0DED01907AE5B00C073AF /* Word.h */,
-				32C0DED11907AE5B00C073AF /* Word.m */,
 				32C0DED41907AEE600C073AF /* Bookmark.h */,
 				32C0DED51907AEE600C073AF /* Bookmark.m */,
 				324ED2371906A95600E4335B /* Vocabulary */,
@@ -249,10 +259,12 @@
 				3235D1051907806600A21091 /* AllWordViewController.m in Sources */,
 				3235D108190782A000A21091 /* HistoryViewController.m in Sources */,
 				32C0DEC819078D0500C073AF /* Vocabulary.xcdatamodeld in Sources */,
-				32C0DED21907AE5B00C073AF /* Word.m in Sources */,
 				32C0DED61907AEE600C073AF /* Bookmark.m in Sources */,
 				32C0DED91907B03B00C073AF /* NewBookmarkViewController.m in Sources */,
-				32C0DEDF1907C6CE00C073AF /* LocalHistory.m in Sources */,
+				32C0DF181907E4C500C073AF /* WordTableViewController.m in Sources */,
+				32C0DF1E1907E7F200C073AF /* Word_Bookmark.m in Sources */,
+				32C0DF211907E7F300C073AF /* Word.m in Sources */,
+				32C0DF241907E7F400C073AF /* LocalHistory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

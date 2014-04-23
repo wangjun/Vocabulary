@@ -9,20 +9,19 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Word;
 
 @interface Bookmark : NSManagedObject
 
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSDate * adddate;
-@property (nonatomic, retain) NSSet *word_had;
+@property (nonatomic, retain) NSSet *word_bookmark;
 @end
 
 @interface Bookmark (CoreDataGeneratedAccessors)
 
-- (void)addWord_hadObject:(Word *)value;
-- (void)removeWord_hadObject:(Word *)value;
-- (void)addWord_had:(NSSet *)values;
-- (void)removeWord_had:(NSSet *)values;
+- (void)addWord_bookmarkObject:(NSManagedObject *)value;
+- (void)removeWord_bookmarkObject:(NSManagedObject *)value;
+- (void)addWord_bookmark:(NSSet *)values;
+- (void)removeWord_bookmark:(NSSet *)values;
 
 @end

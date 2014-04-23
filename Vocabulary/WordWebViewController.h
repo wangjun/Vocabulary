@@ -15,4 +15,6 @@
 @property (nonatomic,strong) Word *showingWord;
 @property (nonatomic) NSUInteger currentIndex;
 @property (nonatomic,weak) NSArray *words;
+
+-(void)setNotRecord:(BOOL)record;
 @end

@@ -14,7 +14,7 @@
 #import "Word.h"
 #import "Bookmark.h"
 #import "LocalHistory.h"
-
+#import "Word_Bookmark.h"
 
 @implementation AppDelegate
 @synthesize managedObjectContext = _managedObjectContext;
@@ -86,24 +86,6 @@
     [self.window setRootViewController:rootViewController];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-    {
-        NSManagedObjectContext *context = [self managedObjectContext];
-        Bookmark *bookmark1 = (Bookmark*)[NSEntityDescription
-                                           insertNewObjectForEntityForName:@"Bookmark"
-                                           inManagedObjectContext:context];
-        [bookmark1 setValue:@"词汇1" forKey:@"name"];
-        [bookmark1 setValue:[NSDate date] forKey:@"adddate"];
-        Word *word1 = (Word*)[NSEntityDescription
-                                              insertNewObjectForEntityForName:@"Word"
-                                              inManagedObjectContext:context];
-        [word1 setValue:@"able" forKey:@"word"];
-        [word1 addBookmarks:[NSSet setWithObject:bookmark1]];
-        [bookmark1 addWord_had:[NSSet setWithObject:word1]];
-        NSError *error;
-        if (![context save:&error]) {
-            NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
-        }
-    }
     
     // Override point for customization after application launch.
     return YES;

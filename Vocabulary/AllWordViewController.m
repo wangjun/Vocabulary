@@ -7,12 +7,17 @@
 //
 
 #import "AllWordViewController.h"
+#import "AppDelegate.h"
+#import "Word.h"
+
 
 @interface AllWordViewController ()
 
 @end
 
 @implementation AllWordViewController
+@synthesize context = _context;
+@synthesize words = _words;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -21,6 +26,8 @@
         self.navigationItem.title = @"全部单词";
         self.tabBarItem.title = @"全部单词";
         // Custom initialization
+        AppDelegate *appDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+        _context = appDelegate.managedObjectContext;
     }
     return self;
 }
@@ -35,6 +42,19 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
+
+-(NSArray*)words{
+    if (_words == nil) {
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription
+                                       entityForName:@"Word" inManagedObjectContext:self.context];
+        [fetchRequest setEntity:entity];
+        NSError *error;
+        _words = [self.context executeFetchRequest:fetchRequest error:&error];
+    }
+    return _words;
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -51,7 +71,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1000;
+    return self.words.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -62,8 +82,7 @@
     if(cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    NSString *str = [NSString stringWithFormat:@"word%d",indexPath.row+1];
-    cell.textLabel.text = str;
+    cell.textLabel.text = [[self.words objectAtIndex:indexPath.row] valueForKey:@"word"];
     return cell;
 }
 

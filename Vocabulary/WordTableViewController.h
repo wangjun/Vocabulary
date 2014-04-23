@@ -1,5 +1,5 @@
 //
-//  AllWordViewController.h
+//  WordTableViewController.h
 //  Vocabulary
 //
 //  Created by 徐哲 on 14-4-23.
@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@class Bookmark;
+@interface WordTableViewController : UITableViewController
 
-@interface AllWordViewController : UITableViewController
-
-
+@property (nonatomic) Bookmark *bookmark;
 @property (nonatomic,strong) NSManagedObjectContext *context;
 @property (nonatomic,strong) NSArray *words;
 @end

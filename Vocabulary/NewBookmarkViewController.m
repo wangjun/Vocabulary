@@ -63,7 +63,12 @@
     [self.view addSubview:self.okButton];
     
     self.bookmarkfield = [[UITextField alloc] initWithFrame:CGRectMake(50, 30, 220, 50)];
+    self.bookmarkfield.borderStyle =UITextBorderStyleRoundedRect;
+    self.bookmarkfield.backgroundColor = [UIColor whiteColor];
     self.bookmarkfield.delegate = self;
+    self.bookmarkfield.text = @"";
+    [self.view addSubview:self.bookmarkfield];
+    self.view.backgroundColor = [UIColor brownColor];
 	// Do any additional setup after loading the view.
 }
 

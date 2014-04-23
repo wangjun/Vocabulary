@@ -14,6 +14,7 @@
 @interface WordWebViewController ()
 
 -(NSURL*)getURL:(NSString*)word;
+@property (nonatomic) BOOL notRecord;
 @end
 
 @implementation WordWebViewController
@@ -60,7 +61,7 @@
 {
     if(_showingWord == nil)
     {
-        NSString *word = @"able";
+        NSString *word = @"abandon";
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
         NSEntityDescription *entity = [NSEntityDescription
                                        entityForName:@"Word" inManagedObjectContext:_managedObjectContext];
@@ -89,6 +90,24 @@
     
     [self loadWord:self.showingWord];
 
+}
+
+-(NSArray*)words
+{
+    if(_words == nil && self.notRecord == YES)
+    {
+        _words = @[self.showingWord];
+    }
+    else if(_words == nil && self.notRecord == NO)
+    {
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription
+                                       entityForName:@"Word" inManagedObjectContext:_managedObjectContext];
+        [fetchRequest setEntity:entity];
+        NSError *error;
+        _words = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    }
+    return _words;
 }
 
 -(void)gotoNext
@@ -144,12 +163,20 @@
 
 -(NSURL*)getURL:(NSString *)word
 {
-    NSURL *url = [[NSBundle mainBundle] URLForResource:word withExtension:@"html"];
+     NSString *bundlePath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"words.bundle"];
+    
+    NSURL *url = [[NSBundle bundleWithPath:bundlePath] URLForResource:word withExtension:@"html"];
     return url;
 }
 
 -(void)loadWord:(Word*)word
 {
+    if(!self.notRecord)
+    {
+        [[NSUserDefaults standardUserDefaults] setValue:word.word forKey:@"currentWord"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    self.currentIndex = [self.words indexOfObject:word];
     NSURLRequest * wordRequest = [NSURLRequest requestWithURL:[self getURL:word.word]];
     [self.wordweb loadRequest:wordRequest];
 }
@@ -157,7 +184,11 @@
 -(void)saveWordToBookmark
 {
     AddToBookmarkViewController *vc = [[AddToBookmarkViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    vc.word = self.showingWord;
+    [vc setWord:self.showingWord];
     [self.navigationController pushViewController:vc animated:YES];
+}
+-(void)setNotRecord:(BOOL)record
+{
+    self.notRecord = record;
 }
 @end

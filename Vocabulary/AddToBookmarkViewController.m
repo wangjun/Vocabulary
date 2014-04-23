@@ -10,9 +10,10 @@
 #import "Bookmark.h"
 #import "AppDelegate.h"
 #import "Word.h"
+#import "Word_Bookmark.h"
 
 @interface AddToBookmarkViewController ()
-@property (nonatomic,strong,readonly) NSArray *word_hadsmarks;
+@property (nonatomic,strong) NSMutableArray *latest_bookmarks;
 @end
 
 @implementation AddToBookmarkViewController
@@ -20,7 +21,7 @@
 @synthesize word = _word;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize bookmarks = _bookmarks;
-@synthesize word_hadsmarks = _word_hadsmarks;
+@synthesize latest_bookmarks = _latest_bookmarks;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -57,37 +58,37 @@
                                        entityForName:@"Bookmark" inManagedObjectContext:_managedObjectContext];
         [fetchRequest setEntity:entity];
         NSError *error;
-        _bookmarks = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
-        for (NSManagedObject *info in _bookmarks) {
-            NSLog(@"Name: %@", [info valueForKey:@"name"]);
+        NSArray *array = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
+        NSMutableArray *mutableArray = [NSMutableArray array];
+        for (NSManagedObject *info in array) {
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            NSEntityDescription *entity = [NSEntityDescription
+                                           entityForName:@"Word_Bookmark" inManagedObjectContext:_managedObjectContext];
+            [fetchRequest setEntity:entity];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"word = %@ AND bookmark = %@",self.word,info];
+            fetchRequest.predicate = predicate;
+            NSError *error;
+            NSArray *word_bookmarks = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
+            NSMutableDictionary *dic;
+            if(word_bookmarks.count == 0)
+            {
+                dic = [NSMutableDictionary dictionary];
+                [dic setValue:@"NO" forKey:@"now_have"];
+                [dic setValue:@"NO" forKey:@"old_have"];
+                [dic setValue:info forKey:@"value"];
+            }
+            else
+            {
+                dic = [NSMutableDictionary dictionary];
+                [dic setValue:@"YES" forKey:@"now_have"];
+                [dic setValue:@"YES" forKey:@"old_have"];
+                [dic setValue:info forKey:@"value"];
+            }
+            [mutableArray addObject:dic];
         }
+        _bookmarks = mutableArray;
     }
     return _bookmarks;
-}
-
--(void)setBookmarks:(NSArray *)bookmarks
-{
-    _bookmarks = bookmarks;
-}
-
--(NSArray*)word_hadsmarks
-{
-    if(_word_hadsmarks == nil)
-    {
-        _word_hadsmarks = [self.word.bookmarks allObjects];
-    }
-    return _word_hadsmarks;
-}
--(void)setWord:(NSString*)wordString
-{
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription
-                                   entityForName:@"Word" inManagedObjectContext:_managedObjectContext];
-    [fetchRequest setEntity:entity];
-    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"word = %@",wordString];
-    [fetchRequest setPredicate:predicate];
-    NSError *error;
-    _word = (Word*)[_managedObjectContext executeFetchRequest:fetchRequest error:&error];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -135,17 +136,18 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Bookmark *bookmark = [self.bookmarks objectAtIndex:indexPath.row];
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+
     if(cell.accessoryType != UITableViewCellAccessoryCheckmark)
     {
+        
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        [self.word addBookmarks:[NSSet setWithObject:bookmark]];
+        [self.bookmarks[indexPath.row] setValue:@"YES" forKey:@"now_have"];
     }
     else
     {
         cell.accessoryType = UITableViewCellAccessoryNone;
-        [self.word removeBookmarks:[NSSet setWithObject:bookmark]];
+        [self.bookmarks[indexPath.row] setValue:@"NO" forKey:@"now_have"];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -153,16 +155,42 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    Bookmark *bookmark = [self.bookmarks objectAtIndex:indexPath.row];
-    if([self.word_hadsmarks containsObject:bookmark])
+    NSDictionary *bookmark = [self.bookmarks objectAtIndex:indexPath.row];
+    if([[bookmark valueForKey:@"now_have"] isEqual:@"YES"])
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     else
         cell.accessoryType = UITableViewCellAccessoryNone;
-    cell.textLabel.text = bookmark.name;
+    cell.textLabel.text = [[bookmark valueForKey:@"value"] valueForKey:@"name"];
 }
 
 -(void)doneSave
 {
+    for (NSDictionary *dic in self.bookmarks) {
+        if([[dic valueForKey:@"old_have"] isEqual: @"YES"] && [[dic valueForKey:@"now_have"] isEqual: @"NO"])
+        {
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            NSEntityDescription *entity = [NSEntityDescription
+                                           entityForName:@"Word_Bookmark" inManagedObjectContext:_managedObjectContext];
+            [fetchRequest setEntity:entity];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"word = %@ AND bookmark = %@",self.word,[dic valueForKey:@"value"]];
+            fetchRequest.predicate = predicate;
+            NSError *error;
+            NSArray *word_bookmarks = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
+            [self.managedObjectContext deleteObject:word_bookmarks[0]];
+
+        }
+        if([[dic valueForKey:@"old_have"] isEqual: @"NO"] && [[dic valueForKey:@"needDelete"] isEqual: @"YES"])
+        {
+            NSManagedObjectContext *context = [self managedObjectContext];
+            Word_Bookmark *word = (Word_Bookmark*)[NSEntityDescription
+                                 insertNewObjectForEntityForName:@"Word_Bookmark"
+                                 inManagedObjectContext:context];
+            word.word = self.word;
+            word.bookmark = [dic valueForKey:@"value"];
+        }
+    }
+    [self.managedObjectContext save:nil];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 @end
