@@ -2,16 +2,16 @@
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Bookmark" representedClassName="Bookmark" syncable="YES">
         <attribute name="adddate" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <relationship name="word_bookmark" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Word_Bookmark" inverseName="bookmark" inverseEntity="Word_Bookmark" syncable="YES"/>
     </entity>
     <entity name="LocalHistory" representedClassName="LocalHistory" syncable="YES">
-        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
         <relationship name="word" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Word" inverseName="history" inverseEntity="Word" syncable="YES"/>
     </entity>
     <entity name="Word" representedClassName="Word" syncable="YES">
         <attribute name="lookdCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="word" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="word" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <relationship name="history" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LocalHistory" inverseName="word" inverseEntity="LocalHistory" syncable="YES"/>
         <relationship name="word_bookmark" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Word_Bookmark" inverseName="word" inverseEntity="Word_Bookmark" syncable="YES"/>
     </entity>
@@ -21,9 +21,9 @@
         <relationship name="word" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Word" inverseName="word_bookmark" inverseEntity="Word" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Bookmark" positionX="160" positionY="192" width="128" height="88"/>
-        <element name="Word" positionX="63" positionY="-18" width="128" height="103"/>
-        <element name="LocalHistory" positionX="-234" positionY="9" width="128" height="73"/>
+        <element name="Bookmark" positionX="160" positionY="192" width="128" height="90"/>
+        <element name="LocalHistory" positionX="-234" positionY="9" width="128" height="75"/>
+        <element name="Word" positionX="63" positionY="-18" width="128" height="105"/>
         <element name="Word_Bookmark" positionX="160" positionY="192" width="128" height="90"/>
     </elements>
 </model>

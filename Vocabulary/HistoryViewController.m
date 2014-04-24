@@ -7,12 +7,21 @@
 //
 
 #import "HistoryViewController.h"
+#import "AppDelegate.h"
+#import "Word.h"
+#import "LocalHistory.h"
+#import "Bookmark.h"
+#import "WordWebViewController.h"
+
 
 @interface HistoryViewController ()
 
 @end
 
 @implementation HistoryViewController
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize historys = _historys;
+
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -20,6 +29,9 @@
     if (self) {
         // Custom initialization
         self.navigationItem.title = @"历史记录";
+//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBookmark)];
+        AppDelegate *appDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+        _managedObjectContext = appDelegate.managedObjectContext;
         
     }
     return self;
@@ -29,13 +41,79 @@
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    self.clearsSelectionOnViewWillAppear = YES;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.tableView reloadData];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.managedObjectContext save:nil];
+    _historys = nil;
+}
+
+- (NSArray*)historys
+{
+    if(_historys == nil)
+    {
+        NSMutableArray *array = [NSMutableArray array];
+        NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"LocalHistory" inManagedObjectContext:self.managedObjectContext];
+        [fetch setEntity:entity];
+        [fetch setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO],nil]];
+        [fetch setFetchLimit:500];
+        NSArray *historys = [self.managedObjectContext executeFetchRequest:fetch error:nil];
+        
+        
+        unsigned units  = NSMonthCalendarUnit|NSDayCalendarUnit|NSYearCalendarUnit;
+        NSCalendar *myCal = [[NSCalendar alloc]initWithCalendarIdentifier:NSGregorianCalendar];
+        NSDateComponents *comp_now = [myCal components:units fromDate:[NSDate date]];
+        NSInteger month_now = [comp_now month];
+        NSInteger year_now = [comp_now year];
+        NSInteger day_now = [comp_now day];
+        NSLog(@"now year = %d   month = %d  day = %d",year_now,month_now,day_now);
+        if(historys.count > 0){
+            for (LocalHistory *history in historys) {
+                
+                NSDateComponents *comp1 = [myCal components:units fromDate:history.date];
+                NSInteger month = [comp1 month];
+                NSInteger year = [comp1 year];
+                NSInteger day = [comp1 day];
+                NSLog(@"history year = %d   month = %d  day = %d",year,month,day);
+                
+                BOOL isfound = NO;
+                for (NSDictionary *dic in array) {
+                    if(![[dic valueForKey:@"day"] isEqual:[NSNumber numberWithInt:day]])
+                        break;
+                    if(![[dic valueForKey:@"month"] isEqual:[NSNumber numberWithInt:month]])
+                        break;
+                    if(![[dic valueForKey:@"year"] isEqual:[NSNumber numberWithInt:year]])
+                        break;
+                    isfound = YES;
+                    [[dic valueForKey:@"value"] addObject:history];
+                }
+                if(isfound == NO){
+                    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+                    [dic setValue:[NSNumber numberWithInt:day] forKey:@"day"];
+                    [dic setValue:[NSNumber numberWithInt:month] forKey:@"month"];
+                    [dic setValue:[NSNumber numberWithInt:year] forKey:@"year"];
+                    NSMutableArray *array = [NSMutableArray array];
+                    [array addObject:history];
+                }
+            }
+        }
+        NSLog(@"%@",array);
+        _historys = array;
+    }
+    return _historys;
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -47,65 +125,32 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     
-    return 3;
+    return self.historys.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    NSArray *words = (NSArray*)[self.historys[section] valueForKey:@"words"];
+    return words.count;
+}
+
+-(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [self.historys[section] valueForKey:@"date"];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"HistoryCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if(cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"word     %d      %d",indexPath.section,indexPath.row];
-    
+    NSArray *words = (NSArray*)[self.historys[indexPath.section] valueForKey:@"words"];
+    cell.textLabel.text = [words[indexPath.row] valueForKey:@"word"];
     return cell;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 

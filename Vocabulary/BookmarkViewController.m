@@ -45,9 +45,6 @@
         [fetchRequest setEntity:entity];
         NSError *error;
         _bookmarks = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
-        for (NSManagedObject *info in _bookmarks) {
-            NSLog(@"Name: %@", [info valueForKey:@"name"]);
-        }
     }
     return _bookmarks;
 }
@@ -56,7 +53,7 @@
 {
     [super viewDidLoad];
 
-    self.clearsSelectionOnViewWillAppear = NO;
+    self.clearsSelectionOnViewWillAppear = YES;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;

@@ -41,9 +41,6 @@
         [fetchRequest setEntity:entity];
         NSError *error;
         _bookmarks = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
-        for (NSManagedObject *info in _bookmarks) {
-            NSLog(@"Name: %@", [info valueForKey:@"name"]);
-        }
     }
     return _bookmarks;
 }
