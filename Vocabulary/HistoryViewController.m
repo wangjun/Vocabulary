@@ -67,7 +67,7 @@
         NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
         NSEntityDescription *entity = [NSEntityDescription entityForName:@"LocalHistory" inManagedObjectContext:self.managedObjectContext];
         [fetch setEntity:entity];
-        [fetch setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO],nil]];
+        [fetch setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO]]];
         [fetch setFetchLimit:500];
         NSArray *historys = [self.managedObjectContext executeFetchRequest:fetch error:nil];
         

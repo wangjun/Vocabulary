@@ -14,7 +14,8 @@
 @interface WordWebViewController ()
 
 -(NSURL*)getURL:(NSString*)word;
-@property (nonatomic) BOOL notRecord;
+@property (nonatomic) BOOL isOnlyOne;
+@property (nonatomic,strong)NSArray *words;
 @end
 
 @implementation WordWebViewController
@@ -22,58 +23,48 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize showingWord = _showingWord,wordweb;
 @synthesize notRecord = _notRecord;
+@synthesize words = _words;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveWordToBookmark)];
         AppDelegate *appDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
         _managedObjectContext = appDelegate.managedObjectContext;
+        self.notRecord = YES;
+        self.isOnlyOne = YES;
     }
     return self;
 }
 
-- (id)initWithWord:(NSString*)word
+- (void)setShowingWord:(Word*)word andIsOnlyOne:(BOOL)isOnlyOne andNotRecord:(BOOL)notRecord  andWords:(NSArray*)words
 {
-    self = [self initWithNibName:nil bundle:nil];
-    if (self) {
-        [self setShowingWord:word];
-    }
-    return self;
+    self.words = words;
+    self.showingWord = word;
+    self.notRecord = notRecord;
+    self.isOnlyOne = isOnlyOne;
+    
 }
 
-- (void)setShowingWord:(NSString *)showingWord
+-(void)setShowingWord:(Word *)showingWord
 {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription
-                                   entityForName:@"Word" inManagedObjectContext:_managedObjectContext];
-    [fetchRequest setEntity:entity];
-    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"word = %@",showingWord];
-    [fetchRequest setPredicate:predicate];
-    NSError *error;
-    NSArray *words = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    _showingWord = words[0];
-    self.navigationItem.title = _showingWord.word;
-}
-
-- (Word*)showingWord
-{
-    if(_showingWord == nil)
+    _showingWord = showingWord;
+    self.navigationItem.title = showingWord.word;
+    NSUInteger index = 0;
+    for(Word *word in self.words)
     {
-        NSString *word = @"abandon";
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-        NSEntityDescription *entity = [NSEntityDescription
-                                       entityForName:@"Word" inManagedObjectContext:_managedObjectContext];
-        [fetchRequest setEntity:entity];
-        NSPredicate * predicate = [NSPredicate predicateWithFormat:@"word = %@",word];
-        [fetchRequest setPredicate:predicate];
-        NSError *error;
-        NSArray *words = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
-        _showingWord = words[0];
+        if([word isEqual:self.showingWord])
+        {
+            self.currentIndex = index;
+            NSLog(@"WordWebViewController        self.currentIndex = %d",index);
+            break;
+        }
+        
+        index ++;
+        
     }
-    return _showingWord;
 }
 
 -(void)gotoTheLast
@@ -87,28 +78,10 @@
         self.currentIndex --;
     }
 
-    self.showingWord = [self.words objectAtIndex:self.currentIndex];
+    _showingWord = [self.words objectAtIndex:self.currentIndex];
     
     [self loadWord:self.showingWord];
 
-}
-
--(NSArray*)words
-{
-    if(_words == nil && self.notRecord == YES)
-    {
-        _words = @[self.showingWord];
-    }
-    else if(_words == nil && self.notRecord == NO)
-    {
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-        NSEntityDescription *entity = [NSEntityDescription
-                                       entityForName:@"Word" inManagedObjectContext:_managedObjectContext];
-        [fetchRequest setEntity:entity];
-        NSError *error;
-        _words = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    }
-    return _words;
 }
 
 -(void)gotoNext
@@ -121,14 +94,34 @@
     {
         self.currentIndex ++;
     }
-    self.showingWord = [self.words objectAtIndex:self.currentIndex];
+    _showingWord = [self.words objectAtIndex:self.currentIndex];
     
     [self loadWord:self.showingWord];
 }
+
+-(NSArray*)words
+{
+    if(_words == nil && self.isOnlyOne == YES)
+    {
+        _words = @[self.showingWord];
+    }
+    else if(_words == nil && self.isOnlyOne == NO)
+    {
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription
+                                       entityForName:@"Word" inManagedObjectContext:_managedObjectContext];
+        [fetchRequest setEntity:entity];
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"word" ascending:YES];
+        [fetchRequest setSortDescriptors:@[sortDescriptor]];
+        NSError *error;
+        _words = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    }
+    return _words;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.words = [AppDelegate shareWordArray];
     
     self.wordweb = [[UIWebView alloc] initWithFrame:self.view.bounds];
     self.wordweb.scalesPageToFit = YES;
@@ -155,13 +148,6 @@
     [self loadWord:self.showingWord];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
 -(NSURL*)getURL:(NSString *)word
 {
      NSString *bundlePath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:@"words.bundle"];
@@ -178,6 +164,7 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     self.currentIndex = [self.words indexOfObject:word];
+    self.navigationItem.title = word.word;
     NSURLRequest * wordRequest = [NSURLRequest requestWithURL:[self getURL:word.word]];
     [self.wordweb loadRequest:wordRequest];
 }
@@ -188,8 +175,5 @@
     [vc setWord:self.showingWord];
     [self.navigationController pushViewController:vc animated:YES];
 }
--(void)setNotRecord:(BOOL)record
-{
-    _notRecord = record;
-}
+
 @end

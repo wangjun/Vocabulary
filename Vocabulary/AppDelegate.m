@@ -35,7 +35,7 @@
         NSEnumerator *files = [fileList objectEnumerator];
         NSString *string;
         while (string = [files nextObject]) {
-            NSString *wordname = [string componentsSeparatedByString:@"."][0];
+            NSString *wordname = [string componentsSeparatedByString:@".htm"][0];
             NSManagedObjectContext *context = [self managedObjectContext];
             Word *word = (Word*)[NSEntityDescription
                                               insertNewObjectForEntityForName:@"Word"
@@ -44,8 +44,6 @@
             word.lookdCount = 0;
             NSLog(@"%@",word.word);
         }
-        [self saveContext];
-        
     }
     else
     {
@@ -58,8 +56,26 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     UITabBarController *rootViewController = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
     
+    NSString *currentWordStr = [[NSUserDefaults standardUserDefaults] valueForKey:@"currentWord"];
+    NSLog(@"%@",currentWordStr);
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Word" inManagedObjectContext:self.managedObjectContext];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"word = %@",currentWordStr];
+    [fetchRequest setPredicate:predicate];
+    [fetchRequest setEntity:entity];
+    NSArray *array = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    Word *currentWord = array[0];
+    
+    fetchRequest = [[NSFetchRequest alloc] init];
+    entity = [NSEntityDescription entityForName:@"Word"
+                         inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"word" ascending:YES]]];
+    array = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
     
     WordWebViewController *wordwebVC = [[WordWebViewController alloc] initWithNibName:nil bundle:nil];
+    [wordwebVC setShowingWord:currentWord andIsOnlyOne:NO andNotRecord:NO andWords:array];
+    
     UINavigationController *wordNavVC = [[UINavigationController alloc] initWithRootViewController:wordwebVC];
     wordNavVC.tabBarItem.title = @"继续背单词";
     [rootViewController addChildViewController:wordNavVC];
@@ -86,7 +102,8 @@
     [self.window setRootViewController:rootViewController];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-    
+    [self saveContext];
+
     // Override point for customization after application launch.
     return YES;
 }
@@ -181,15 +198,4 @@
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
-
-
-+(NSArray*)shareWordArray
-{
-    if(wordArray == nil)
-    {
-        wordArray = @[@"able",@"able",@"able"];
-    }
-    
-    return wordArray;
-}
 @end

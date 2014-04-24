@@ -22,7 +22,6 @@
 		324ED2441906A95600E4335B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 324ED2431906A95600E4335B /* Default.png */; };
 		324ED2461906A95600E4335B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 324ED2451906A95600E4335B /* Default@2x.png */; };
 		324ED2481906A95600E4335B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 324ED2471906A95600E4335B /* Default-568h@2x.png */; };
-		324ED2641906B69200E4335B /* able.html in Resources */ = {isa = PBXBuildFile; fileRef = 324ED2631906B69200E4335B /* able.html */; };
 		32C0DEC819078D0500C073AF /* Vocabulary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DEC619078D0500C073AF /* Vocabulary.xcdatamodeld */; };
 		32C0DED61907AEE600C073AF /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DED51907AEE600C073AF /* Bookmark.m */; };
 		32C0DED91907B03B00C073AF /* NewBookmarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DED81907B03B00C073AF /* NewBookmarkViewController.m */; };
@@ -58,7 +57,6 @@
 		324ED2431906A95600E4335B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		324ED2451906A95600E4335B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		324ED2471906A95600E4335B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		324ED2631906B69200E4335B /* able.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = able.html; sourceTree = "<group>"; };
 		32C0DEC719078D0500C073AF /* Vocabulary.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Vocabulary.xcdatamodel; sourceTree = "<group>"; };
 		32C0DED41907AEE600C073AF /* Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bookmark.h; path = Vocabulary/Bookmark.h; sourceTree = "<group>"; };
 		32C0DED51907AEE600C073AF /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Bookmark.m; path = Vocabulary/Bookmark.m; sourceTree = "<group>"; };
@@ -154,7 +152,6 @@
 			isa = PBXGroup;
 			children = (
 				32C0DF141907E0E800C073AF /* words.bundle */,
-				324ED2631906B69200E4335B /* able.html */,
 				324ED2391906A95600E4335B /* Vocabulary-Info.plist */,
 				324ED23A1906A95600E4335B /* InfoPlist.strings */,
 				324ED23D1906A95600E4335B /* main.m */,
@@ -223,7 +220,6 @@
 				324ED2441906A95600E4335B /* Default.png in Resources */,
 				324ED2461906A95600E4335B /* Default@2x.png in Resources */,
 				324ED2481906A95600E4335B /* Default-568h@2x.png in Resources */,
-				324ED2641906B69200E4335B /* able.html in Resources */,
 				32C0DF151907E0E900C073AF /* words.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

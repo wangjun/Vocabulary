@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-static NSArray *wordArray;
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
@@ -15,7 +14,6 @@ static NSArray *wordArray;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-+(NSArray*)shareWordArray;
 - (NSURL *)applicationDocumentsDirectory;
 - (void)saveContext;
 @end

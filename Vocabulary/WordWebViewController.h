@@ -14,7 +14,6 @@
 @property (nonatomic,strong) UIWebView *wordweb;
 @property (nonatomic,strong) Word *showingWord;
 @property (nonatomic) NSUInteger currentIndex;
-@property (nonatomic,weak) NSArray *words;
-
--(void)setNotRecord:(BOOL)record;
+@property (nonatomic) BOOL notRecord;
+- (void)setShowingWord:(Word*)word andIsOnlyOne:(BOOL)isOnlyOne andNotRecord:(BOOL)notRecord  andWords:(NSArray*)words;
 @end

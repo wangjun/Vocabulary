@@ -49,6 +49,8 @@
         NSEntityDescription *entity = [NSEntityDescription
                                        entityForName:@"Word" inManagedObjectContext:self.context];
         [fetchRequest setEntity:entity];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"word" ascending:YES];
+        [fetchRequest setSortDescriptors:@[sort]];
         NSError *error;
         _words = [self.context executeFetchRequest:fetchRequest error:&error];
     }

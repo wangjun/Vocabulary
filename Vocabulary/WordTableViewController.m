@@ -92,8 +92,8 @@
 {
     Word *word = [[_words objectAtIndex:indexPath.row] valueForKey:@"word"];
     WordWebViewController *wordVC = [[WordWebViewController alloc] initWithNibName:nil bundle:nil];
-    wordVC.showingWord = word.word;
-    [wordVC setNotRecord:YES];
+    NSArray *array = [self.words valueForKey:@"word"];
+    [wordVC setShowingWord:word andIsOnlyOne:NO andNotRecord:YES andWords:array];
     [self.navigationController pushViewController:wordVC animated:YES];
 }
 
