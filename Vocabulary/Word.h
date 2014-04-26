@@ -13,6 +13,7 @@
 
 @interface Word : NSManagedObject
 
+@property (nonatomic, retain) NSString * firstchar;
 @property (nonatomic, retain) NSString * word;
 @property (nonatomic, retain) NSNumber * lookdCount;
 @property (nonatomic, retain) NSSet *history;

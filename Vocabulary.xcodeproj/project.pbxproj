@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		32238018190BE3B90054B42B /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 32238017190BE3B90054B42B /* libsqlite3.dylib */; };
 		3235D0FA19075E9E00A21091 /* WordWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3235D0F919075E9E00A21091 /* WordWebViewController.m */; };
 		3235D0FF1907670B00A21091 /* AddToBookmarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3235D0FE1907670B00A21091 /* AddToBookmarkViewController.m */; };
 		3235D10219076C8C00A21091 /* BookmarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3235D10119076C8C00A21091 /* BookmarkViewController.m */; };
@@ -25,14 +26,15 @@
 		32C0DEC819078D0500C073AF /* Vocabulary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DEC619078D0500C073AF /* Vocabulary.xcdatamodeld */; };
 		32C0DED61907AEE600C073AF /* Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DED51907AEE600C073AF /* Bookmark.m */; };
 		32C0DED91907B03B00C073AF /* NewBookmarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DED81907B03B00C073AF /* NewBookmarkViewController.m */; };
-		32C0DF151907E0E900C073AF /* words.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 32C0DF141907E0E800C073AF /* words.bundle */; };
 		32C0DF181907E4C500C073AF /* WordTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DF171907E4C400C073AF /* WordTableViewController.m */; };
 		32C0DF1E1907E7F200C073AF /* Word_Bookmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DF1D1907E7F100C073AF /* Word_Bookmark.m */; };
 		32C0DF211907E7F300C073AF /* Word.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DF201907E7F300C073AF /* Word.m */; };
 		32C0DF241907E7F400C073AF /* LocalHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C0DF231907E7F400C073AF /* LocalHistory.m */; };
+		32F8D59519096E9100C4F4D2 /* words.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 32F8D59419096E9100C4F4D2 /* words.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		32238017190BE3B90054B42B /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		3235D0F819075E9E00A21091 /* WordWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordWebViewController.h; sourceTree = "<group>"; };
 		3235D0F919075E9E00A21091 /* WordWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WordWebViewController.m; sourceTree = "<group>"; };
 		3235D0FD1907670B00A21091 /* AddToBookmarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddToBookmarkViewController.h; sourceTree = "<group>"; };
@@ -62,7 +64,6 @@
 		32C0DED51907AEE600C073AF /* Bookmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Bookmark.m; path = Vocabulary/Bookmark.m; sourceTree = "<group>"; };
 		32C0DED71907B03B00C073AF /* NewBookmarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewBookmarkViewController.h; path = Vocabulary/NewBookmarkViewController.h; sourceTree = "<group>"; };
 		32C0DED81907B03B00C073AF /* NewBookmarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewBookmarkViewController.m; path = Vocabulary/NewBookmarkViewController.m; sourceTree = "<group>"; };
-		32C0DF141907E0E800C073AF /* words.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = words.bundle; sourceTree = "<group>"; };
 		32C0DF161907E4C400C073AF /* WordTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WordTableViewController.h; path = Vocabulary/WordTableViewController.h; sourceTree = "<group>"; };
 		32C0DF171907E4C400C073AF /* WordTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WordTableViewController.m; path = Vocabulary/WordTableViewController.m; sourceTree = "<group>"; };
 		32C0DF1C1907E7F100C073AF /* Word_Bookmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Word_Bookmark.h; path = Vocabulary/Word_Bookmark.h; sourceTree = "<group>"; };
@@ -71,6 +72,7 @@
 		32C0DF201907E7F300C073AF /* Word.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Word.m; path = Vocabulary/Word.m; sourceTree = "<group>"; };
 		32C0DF221907E7F300C073AF /* LocalHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocalHistory.h; path = Vocabulary/LocalHistory.h; sourceTree = "<group>"; };
 		32C0DF231907E7F400C073AF /* LocalHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocalHistory.m; path = Vocabulary/LocalHistory.m; sourceTree = "<group>"; };
+		32F8D59419096E9100C4F4D2 /* words.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = words.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32238018190BE3B90054B42B /* libsqlite3.dylib in Frameworks */,
 				3235D10D19078C5C00A21091 /* CoreData.framework in Frameworks */,
 				324ED2321906A95600E4335B /* UIKit.framework in Frameworks */,
 				324ED2341906A95600E4335B /* Foundation.framework in Frameworks */,
@@ -91,6 +94,7 @@
 		324ED2251906A95600E4335B = {
 			isa = PBXGroup;
 			children = (
+				32238017190BE3B90054B42B /* libsqlite3.dylib */,
 				32C0DF221907E7F300C073AF /* LocalHistory.h */,
 				32C0DF231907E7F400C073AF /* LocalHistory.m */,
 				32C0DF1F1907E7F200C073AF /* Word.h */,
@@ -151,7 +155,7 @@
 		324ED2381906A95600E4335B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				32C0DF141907E0E800C073AF /* words.bundle */,
+				32F8D59419096E9100C4F4D2 /* words.bundle */,
 				324ED2391906A95600E4335B /* Vocabulary-Info.plist */,
 				324ED23A1906A95600E4335B /* InfoPlist.strings */,
 				324ED23D1906A95600E4335B /* main.m */,
@@ -220,7 +224,7 @@
 				324ED2441906A95600E4335B /* Default.png in Resources */,
 				324ED2461906A95600E4335B /* Default@2x.png in Resources */,
 				324ED2481906A95600E4335B /* Default-568h@2x.png in Resources */,
-				32C0DF151907E0E900C073AF /* words.bundle in Resources */,
+				32F8D59519096E9100C4F4D2 /* words.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

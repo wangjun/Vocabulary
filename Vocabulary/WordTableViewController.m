@@ -93,7 +93,7 @@
     Word *word = [[_words objectAtIndex:indexPath.row] valueForKey:@"word"];
     WordWebViewController *wordVC = [[WordWebViewController alloc] initWithNibName:nil bundle:nil];
     NSArray *array = [self.words valueForKey:@"word"];
-    [wordVC setShowingWord:word andIsOnlyOne:NO andNotRecord:YES andWords:array];
+    [wordVC setShowingWord:word andIsOnlyOne:NO andNotRecord:NO andWords:array];
     [self.navigationController pushViewController:wordVC animated:YES];
 }
 

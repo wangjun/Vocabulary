@@ -42,6 +42,7 @@
                                               inManagedObjectContext:context];
             word.word = wordname;
             word.lookdCount = 0;
+            word.firstchar = [[wordname lowercaseString] substringToIndex:1];
             NSLog(@"%@",word.word);
         }
     }

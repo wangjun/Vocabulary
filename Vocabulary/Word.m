@@ -14,6 +14,7 @@
 
 @implementation Word
 
+@dynamic firstchar;
 @dynamic word;
 @dynamic lookdCount;
 @dynamic history;

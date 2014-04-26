@@ -12,6 +12,7 @@
 
 @implementation LocalHistory
 
+@dynamic adddate;
 @dynamic date;
 @dynamic word;
 

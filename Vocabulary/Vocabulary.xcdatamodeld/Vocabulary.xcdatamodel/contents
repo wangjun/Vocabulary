@@ -6,10 +6,12 @@
         <relationship name="word_bookmark" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Word_Bookmark" inverseName="bookmark" inverseEntity="Word_Bookmark" syncable="YES"/>
     </entity>
     <entity name="LocalHistory" representedClassName="LocalHistory" syncable="YES">
-        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="adddate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <relationship name="word" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Word" inverseName="history" inverseEntity="Word" syncable="YES"/>
     </entity>
     <entity name="Word" representedClassName="Word" syncable="YES">
+        <attribute name="firstchar" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="lookdCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="word" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="history" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LocalHistory" inverseName="word" inverseEntity="LocalHistory" syncable="YES"/>
@@ -22,8 +24,8 @@
     </entity>
     <elements>
         <element name="Bookmark" positionX="160" positionY="192" width="128" height="90"/>
-        <element name="LocalHistory" positionX="-234" positionY="9" width="128" height="75"/>
-        <element name="Word" positionX="63" positionY="-18" width="128" height="105"/>
-        <element name="Word_Bookmark" positionX="160" positionY="192" width="128" height="119"/>
+        <element name="LocalHistory" positionX="-234" positionY="9" width="128" height="90"/>
+        <element name="Word" positionX="63" positionY="-18" width="128" height="120"/>
+        <element name="Word_Bookmark" positionX="160" positionY="192" width="128" height="90"/>
     </elements>
 </model>

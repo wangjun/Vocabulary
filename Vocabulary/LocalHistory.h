@@ -13,7 +13,8 @@
 
 @interface LocalHistory : NSManagedObject
 
-@property (nonatomic, retain) NSDate * date;
+@property (nonatomic, retain) NSDate * adddate;
+@property (nonatomic, retain) NSString * date;
 @property (nonatomic, retain) Word *word;
 
 @end

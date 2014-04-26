@@ -12,5 +12,5 @@
 
 
 @property (nonatomic,strong) NSManagedObjectContext *context;
-@property (nonatomic,strong) NSArray *words;
+@property (nonatomic,strong) NSArray *wordDics;
 @end

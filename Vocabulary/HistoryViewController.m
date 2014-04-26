@@ -59,6 +59,47 @@
     _historys = nil;
 }
 
+-(NSArray*)historys
+{
+    if(_historys == nil)
+    {
+        NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"LocalHistory" inManagedObjectContext:self.managedObjectContext];
+        [fetch setEntity:entity];
+        NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
+        NSSortDescriptor *sort2 = [[NSSortDescriptor alloc] initWithKey:@"adddate" ascending:NO];
+        [fetch setSortDescriptors:@[sort1,sort2]];
+        [fetch setFetchLimit:500];
+        NSArray *historys = [self.managedObjectContext executeFetchRequest:fetch error:nil];
+        
+        NSMutableArray *historyDicArray = [NSMutableArray array];
+        for(LocalHistory *history in historys){
+            BOOL isFound = NO;
+            for(NSMutableDictionary *historyDic in historyDicArray){
+                if([[historyDic valueForKey:@"date"] isEqual:history.date]){
+                    isFound = YES;
+                    NSMutableArray * dic_wordArray = (NSMutableArray*)[historyDic valueForKey:@"WordArray"];
+                    [dic_wordArray addObject:history];
+                    break;
+                }
+            }
+            if(isFound == NO){
+                NSMutableDictionary *historyDic = [NSMutableDictionary dictionary];
+                NSMutableArray *dic_wordArray = [NSMutableArray array];
+                [historyDic setValue:history.date forKey:@"date"];
+                [historyDic setValue:dic_wordArray forKey:@"WordArray"];
+                [dic_wordArray addObject:history];
+                [historyDicArray addObject:historyDic];
+            }
+        }
+        _historys = historyDicArray;
+
+
+    }
+    return _historys;
+}
+
+/*
 - (NSArray*)historys
 {
     if(_historys == nil)
@@ -113,7 +154,9 @@
         _historys = array;
     }
     return _historys;
-}
+}*/
+ 
+ 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -130,7 +173,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSArray *words = (NSArray*)[self.historys[section] valueForKey:@"words"];
+    NSArray *words = (NSArray*)[self.historys[section] valueForKey:@"WordArray"];
     return words.count;
 }
 
@@ -147,8 +190,8 @@
     if(cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    NSArray *words = (NSArray*)[self.historys[indexPath.section] valueForKey:@"words"];
-    cell.textLabel.text = [words[indexPath.row] valueForKey:@"word"];
+    NSArray *words = (NSArray*)[self.historys[indexPath.section] valueForKey:@"WordArray"];
+    cell.textLabel.text = [[words[indexPath.row] valueForKey:@"word"] valueForKey:@"word"];
     return cell;
 }
 
@@ -156,7 +199,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    NSArray *words = [[self.historys[indexPath.section] valueForKey:@"WordArray"] valueForKey:@"word"];
+    Word *word =  words[indexPath.row];
+    WordWebViewController *wordwebVC = [[WordWebViewController alloc] initWithNibName:nil bundle:nil];
+    [wordwebVC setShowingWord:word andIsOnlyOne:NO andNotRecord:YES andWords:words];
+    [self.navigationController pushViewController:wordwebVC animated:YES];
 }
 
 @end

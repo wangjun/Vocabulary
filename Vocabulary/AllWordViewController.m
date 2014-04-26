@@ -9,7 +9,7 @@
 #import "AllWordViewController.h"
 #import "AppDelegate.h"
 #import "Word.h"
-
+#import "WordWebViewController.h"
 
 @interface AllWordViewController ()
 
@@ -17,7 +17,7 @@
 
 @implementation AllWordViewController
 @synthesize context = _context;
-@synthesize words = _words;
+@synthesize wordDics = _wordDics;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -43,18 +43,40 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
--(NSArray*)words{
-    if (_words == nil) {
+-(NSArray*)wordDics{
+    if (_wordDics == nil) {
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
         NSEntityDescription *entity = [NSEntityDescription
                                        entityForName:@"Word" inManagedObjectContext:self.context];
         [fetchRequest setEntity:entity];
+        NSSortDescriptor *firstcharSort = [NSSortDescriptor sortDescriptorWithKey:@"firstchar" ascending:YES];
         NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"word" ascending:YES];
-        [fetchRequest setSortDescriptors:@[sort]];
+        [fetchRequest setSortDescriptors:@[firstcharSort,sort]];
         NSError *error;
-        _words = [self.context executeFetchRequest:fetchRequest error:&error];
+        NSArray *array = [self.context executeFetchRequest:fetchRequest error:&error];
+        NSMutableArray *wordDicArray = [NSMutableArray array];
+        for(Word *word in array){
+            BOOL isFound = NO;
+            for(NSMutableDictionary *wordDic in wordDicArray){
+                if([[wordDic valueForKey:@"firstchar"] isEqual:word.firstchar]){
+                    isFound = YES;
+                    NSMutableArray * dic_wordArray = (NSMutableArray*)[wordDic valueForKey:@"WordArray"];
+                    [dic_wordArray addObject:word];
+                    break;
+                }
+            }
+            if(isFound == NO){
+                NSMutableDictionary *wordDic = [NSMutableDictionary dictionary];
+                NSMutableArray *dic_wordArray = [NSMutableArray array];
+                [wordDic setValue:word.firstchar forKey:@"firstchar"];
+                [wordDic setValue:dic_wordArray forKey:@"WordArray"];
+                [dic_wordArray addObject:word];
+                [wordDicArray addObject:wordDic];
+            }
+        }
+        _wordDics = wordDicArray;
     }
-    return _words;
+    return _wordDics;
 }
 
 
@@ -68,12 +90,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return self.wordDics.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.words.count;
+    return [(NSArray*)[self.wordDics[section] valueForKey:@"WordArray"] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -84,54 +106,27 @@
     if(cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    cell.textLabel.text = [[self.words objectAtIndex:indexPath.row] valueForKey:@"word"];
+    cell.textLabel.text = [[self.wordDics[indexPath.section] valueForKey:@"WordArray"][indexPath.row] valueForKey:@"word"];
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+-(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+    return [self.wordDics[section] valueForKey:@"firstchar"];
 }
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+- (NSArray *) sectionIndexTitlesForTableView : (UITableView *) tableView {
+    
+    return [self.wordDics valueForKey:@"firstchar"];
 }
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    NSArray *words = [self.wordDics[indexPath.section] valueForKey:@"WordArray"];
+    Word *word =  words[indexPath.row];
+    WordWebViewController *wordwebVC = [[WordWebViewController alloc] initWithNibName:nil bundle:nil];
+    [wordwebVC setShowingWord:word andIsOnlyOne:NO andNotRecord:NO andWords:nil];
+    [self.navigationController pushViewController:wordwebVC animated:YES];
 }
 
 @end
